@@ -1,54 +1,80 @@
-DROP TABLE IF EXISTS employees CASCADE;
-DROP TABLE IF EXISTS departments CASCADE;
-DROP TABLE IF EXISTS dept_emp CASCADE;
-DROP TABLE IF EXISTS dept_manager CASCADE;
-DROP TABLE IF EXISTS salaries CASCADE;
-DROP TABLE IF EXISTS titles CASCADE;
+﻿-- Exported from QuickDBD: https://www.quickdatabasediagrams.com/
+-- Link to schema: https://app.quickdatabasediagrams.com/#/d/hvZU3v
+-- NOTE! If you have used non-SQL datatypes in your design, you will have to change these here.
 
+-- Modify this code to update the DB schema diagram.
+-- To reset the sample schema, replace everything with
+-- two dots ('..' - without quotes).
 
-CREATE TABLE employees (
-  emp_no INT PRIMARY KEY,
-  birth_date DATE,
-  first_name VARCHAR(25),
-  last_name VARCHAR(25),
-  gender VARCHAR(1),
-  hire_date DATE
+CREATE TABLE "departments" (
+    "dept_no" varchar   NOT NULL,
+    "dept_name" varchar   NOT NULL,
+    CONSTRAINT "pk_departments" PRIMARY KEY (
+        "dept_no"
+     )
 );
 
-CREATE TABLE departments (
-  dept_no VARCHAR(4) PRIMARY KEY,
-  dept_name VARCHAR(25)
+CREATE TABLE "dept_emp" (
+    "emp_no" int   NOT NULL,
+    "dept_no" varchar   NOT NULL,
+    "from_date" date   NOT NULL,
+    "to-date" date   NOT NULL
 );
 
-CREATE TABLE dept_emp (
-  emp_no INT PRIMARY KEY,
-  dept_no VARCHAR(4),
-  from_date DATE,
-  to_date DATE,
-  FOREIGN KEY (emp_no) REFERENCES employees(emp_no),
-  FOREIGN KEY (dept_no) REFERENCES departments(dept_no)
+CREATE TABLE "dept_manager" (
+    "dept_no" varchar   NOT NULL,
+    "emp_no" varchar   NOT NULL,
+    "from_date" date   NOT NULL,
+    "to_date" date   NOT NULL
 );
 
-CREATE TABLE dept_manager (
-  dept_no VARCHAR(4) PRIMARY KEY,
-  emp_no INT,
-  from_date DATE,
-  to_date DATE,
-  FOREIGN KEY (emp_no) REFERENCES employees(emp_no)
+CREATE TABLE "employees" (
+    "emp_no" int   NOT NULL,
+    "birth_date" date   NOT NULL,
+    "first_name" varchar   NOT NULL,
+    "last_name" varchar   NOT NULL,
+    "gender" varchar   NOT NULL,
+    "hire_date" date   NOT NULL,
+    CONSTRAINT "pk_employees" PRIMARY KEY (
+        "emp_no"
+     )
 );
 
-CREATE TABLE salaries (
-  emp_no INT PRIMARY KEY,
-  salary INT,
-  from_date DATE,
-  to_date DATE,
-  FOREIGN KEY (emp_no) REFERENCES employees(emp_no)
+CREATE TABLE "salaries" (
+    "emp_no" int   NOT NULL,
+    "salary" int   NOT NULL,
+    "from_date" date   NOT NULL,
+    "to_date" date   NOT NULL,
+    CONSTRAINT "pk_salaries" PRIMARY KEY (
+        "emp_no"
+     )
 );
 
-CREATE TABLE titles (
-  emp_no INT PRIMARY KEY,
-  title VARCHAR(25),
-  from_date DATE,
-  to_date DATE,
-  FOREIGN KEY (emp_no) REFERENCES employees(emp_no)
+CREATE TABLE "titles" (
+    "emp_no" int   NOT NULL,
+    "title" varchar   NOT NULL,
+    "from_date" date   NOT NULL,
+    "to_date" date   NOT NULL,
+    CONSTRAINT "pk_titles" PRIMARY KEY (
+        "emp_no"
+     )
 );
+
+ALTER TABLE "dept_emp" ADD CONSTRAINT "fk_dept_emp_emp_no" FOREIGN KEY("emp_no")
+REFERENCES "employees" ("emp_no");
+
+ALTER TABLE "dept_emp" ADD CONSTRAINT "fk_dept_emp_dept_no" FOREIGN KEY("dept_no")
+REFERENCES "departments" ("dept_no");
+
+ALTER TABLE "dept_manager" ADD CONSTRAINT "fk_dept_manager_dept_no" FOREIGN KEY("dept_no")
+REFERENCES "departments" ("dept_no");
+
+ALTER TABLE "dept_manager" ADD CONSTRAINT "fk_dept_manager_emp_no" FOREIGN KEY("emp_no")
+REFERENCES "employees" ("emp_no");
+
+ALTER TABLE "salaries" ADD CONSTRAINT "fk_salaries_emp_no" FOREIGN KEY("emp_no")
+REFERENCES "employees" ("emp_no");
+
+ALTER TABLE "titles" ADD CONSTRAINT "fk_titles_emp_no" FOREIGN KEY("emp_no")
+REFERENCES "employees" ("emp_no");
+
